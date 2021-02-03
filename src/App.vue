@@ -36,40 +36,10 @@
 
     <v-navigation-drawer v-model="showNavDrawer" clipped app>
       <v-list>
-        <v-subheader> Sort </v-subheader>
-        <v-divider></v-divider>
-        <v-list-item>
-          <v-list-item-action-text class="text-caption">
-            Product Name
-          </v-list-item-action-text>
-          <v-list-item-action>
-            <v-btn-toggle v-model="titleSort" @change="sortByTitle">
-              <v-btn>
-                <v-icon>mdi-sort-alphabetical-ascending</v-icon>
-              </v-btn>
-              <v-btn>
-                <v-icon>mdi-sort-alphabetical-descending</v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </v-list-item-action>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-action-text class="text-caption">
-            Product Price
-          </v-list-item-action-text>
-          <v-list-item-action>
-            <v-btn-toggle v-model="priceSort" @change="sortByPrice">
-              <v-btn>
-                <v-icon>mdi-sort-numeric-ascending</v-icon>
-              </v-btn>
-              <v-btn>
-                <v-icon>mdi-sort-numeric-descending</v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </v-list-item-action>
-        </v-list-item>
-
-        <v-divider></v-divider>
+        <ProductListItemSorter
+          @sort:title="sortByTitle"
+          @sort:price="sortByPrice"
+        />
 
         <v-subheader> Filter </v-subheader>
         <v-divider></v-divider>
@@ -149,12 +119,14 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import PriceRange from "@/model/PriceRange";
+import ProductListItemSorter from "@/components/ProductListItemSorter.vue";
 export default Vue.extend({
+  components: {
+    ProductListItemSorter,
+  },
   data() {
     return {
-      productPriceRange: {},
-      titleSort: -1,
-      priceSort: -1,
+      productPriceRange: {} as PriceRange,
       searchText: "",
       showNavDrawer: true,
     };
@@ -182,11 +154,9 @@ export default Vue.extend({
       this.FILTER_PRODUCT_BY_PRICE_RANGE(this.productPriceRange);
     },
     sortByTitle(order: number) {
-      this.priceSort = -1;
       this.SORT_PRODUCTS_BY_TITLE(!!order);
     },
     sortByPrice(order: number) {
-      this.titleSort = -1;
       this.SORT_PRODUCTS_BY_PRICE(!!order);
     },
     searchProduct() {
