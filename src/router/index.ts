@@ -6,7 +6,13 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    component: () => import("@/views/TheProductGallery.vue"),
+    // component: () => import("@/views/TheProductGallery.vue"),
+    components: {
+      default: () => import("@/views/TheProductGallery.vue"),
+      productFilter: () =>
+        import("@/components/ProductListItemPriceFilter.vue"),
+      productSorter: () => import("@/components/ProductListItemSorter.vue"),
+    },
   },
   {
     path: "/products/:id",
