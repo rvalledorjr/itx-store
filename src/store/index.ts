@@ -54,6 +54,9 @@ const store = new Vuex.Store({
       state.comparator = (p1: Product, p2: Product) =>
         p1.comparePriceWith(p2, descending);
     },
+    SEARCH_PRODUCTS(state, searchText: string) {
+      state.filter = (p: Product) => p.containsInfo(searchText);
+    },
   },
   actions: {
     async fetchProducts(context) {

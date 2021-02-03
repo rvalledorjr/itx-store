@@ -6,11 +6,14 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field
+        v-model="searchText"
         placeholder="Search product"
         solo
         hide-details
         clearable
         append-icon="mdi-magnify"
+        @keyup.enter="searchProduct"
+        @click:clear="resetSearch"
       ></v-text-field>
       <v-spacer></v-spacer>
       <v-btn icon x-large>
@@ -148,6 +151,7 @@ export default Vue.extend({
       productPriceRange: {},
       titleSort: -1,
       priceSort: -1,
+      searchText: "",
     };
   },
   computed: {
@@ -160,6 +164,7 @@ export default Vue.extend({
       "FILTER_PRODUCT_BY_PRICE_RANGE",
       "SORT_PRODUCTS_BY_TITLE",
       "SORT_PRODUCTS_BY_PRICE",
+      "SEARCH_PRODUCTS",
     ]),
     ...mapActions(["fetchProducts"]),
     showAllProducts() {
@@ -178,6 +183,13 @@ export default Vue.extend({
     sortByPrice(order: number) {
       this.titleSort = -1;
       this.SORT_PRODUCTS_BY_PRICE(!!order);
+    },
+    searchProduct() {
+      this.SEARCH_PRODUCTS(this.searchText);
+    },
+    resetSearch() {
+      this.searchText = "";
+      this.SEARCH_PRODUCTS(this.searchText);
     },
   },
   async mounted() {

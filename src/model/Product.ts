@@ -40,4 +40,9 @@ export default class Product {
 
     return !reverse ? t1.localeCompare(t2) : t2.localeCompare(t1);
   }
+
+  containsInfo(info: string): boolean {
+    const strRep = `${this.id} ${this.title} ${this.price} ${this.description} ${this.category}`;
+    return strRep.toLowerCase().includes(info.toLowerCase());
+  }
 }
