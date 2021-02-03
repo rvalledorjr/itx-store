@@ -29,7 +29,92 @@
 
     <v-navigation-drawer clipped app>
       <v-list>
+        <v-subheader> Sort </v-subheader>
+        <v-divider></v-divider>
+        <v-list-item>
+          <v-list-item-text class="text-caption">
+            Product Name
+          </v-list-item-text>
+          <v-list-item-action>
+            <v-btn-toggle v-model="titleSort" @change="sortByTitle">
+              <v-btn>
+                <v-icon>mdi-sort-alphabetical-ascending</v-icon>
+              </v-btn>
+              <v-btn>
+                <v-icon>mdi-sort-alphabetical-descending</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-text class="text-caption">
+            Product Price
+          </v-list-item-text>
+          <v-list-item-action>
+            <v-btn-toggle v-model="priceSort" @change="sortByPrice">
+              <v-btn>
+                <v-icon>mdi-sort-numeric-ascending</v-icon>
+              </v-btn>
+              <v-btn>
+                <v-icon>mdi-sort-numeric-descending</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-list-item-action>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-subheader> Filter </v-subheader>
+        <v-divider></v-divider>
+        <v-list-item>
+          <div>
+            <p class="text-caption">Price range</p>
+            <v-range-slider
+              :min="productPriceRange.min"
+              :max="productPriceRange.max"
+              v-model="productPriceRange.range"
+              thumb-label
+              hide-details
+              @end="filterProductsByPriceRange"
+            >
+            </v-range-slider>
+            <v-list-item-content>
+              <v-row>
+                <v-col md="6">
+                  <span>From: </span>
+                  <v-text-field
+                    v-model="productPriceRange.from"
+                    hide-details
+                    outlined
+                    type="number"
+                    :min="productPriceRange.min"
+                    :max="productPriceRange.max"
+                    placeholder="From"
+                    dense
+                  ></v-text-field>
+                </v-col>
+                <v-col md="6">
+                  <span>To: </span>
+                  <v-text-field
+                    v-model="productPriceRange.to"
+                    hide-details
+                    outlined
+                    type="number"
+                    placeholder="To"
+                    :min="productPriceRange.to"
+                    :max="productPriceRange.max"
+                    dense
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-list-item-content>
+          </div>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
         <v-subheader> Categories </v-subheader>
+        <v-divider></v-divider>
         <v-list-item @click="showAllProducts">
           <v-list-item-title> All products </v-list-item-title>
         </v-list-item>
@@ -40,53 +125,6 @@
         >
           <v-list-item-title> {{ c }} </v-list-item-title>
         </v-list-item>
-        <v-subheader> Filter </v-subheader>
-        <v-list>
-          <v-list-item>
-            <v-list-item-content>
-              <p class="text-caption">Price range</p>
-              <v-range-slider
-                :min="productPriceRange.min"
-                :max="productPriceRange.max"
-                v-model="productPriceRange.range"
-                thumb-label
-                hide-details
-                @end="filterProductsByPriceRange"
-              >
-              </v-range-slider>
-              <v-list-item-subtitle>
-                <v-row>
-                  <v-col md="6">
-                    <span>From: </span>
-                    <v-text-field
-                      v-model="productPriceRange.from"
-                      hide-details
-                      outlined
-                      type="number"
-                      :min="productPriceRange.min"
-                      :max="productPriceRange.max"
-                      placeholder="From"
-                      dense
-                    ></v-text-field>
-                  </v-col>
-                  <v-col md="6">
-                    <span>To: </span>
-                    <v-text-field
-                      v-model="productPriceRange.to"
-                      hide-details
-                      outlined
-                      type="number"
-                      placeholder="To"
-                      :min="productPriceRange.to"
-                      :max="productPriceRange.max"
-                      dense
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
       </v-list>
     </v-navigation-drawer>
 
@@ -108,6 +146,8 @@ export default Vue.extend({
   data() {
     return {
       productPriceRange: {},
+      titleSort: -1,
+      priceSort: -1,
     };
   },
   computed: {
@@ -118,6 +158,8 @@ export default Vue.extend({
       "FILTER_PRODUCT_BY_CATEGORY",
       "RESET_PRODUCT_FILTER",
       "FILTER_PRODUCT_BY_PRICE_RANGE",
+      "SORT_PRODUCTS_BY_TITLE",
+      "SORT_PRODUCTS_BY_PRICE",
     ]),
     ...mapActions(["fetchProducts"]),
     showAllProducts() {
@@ -128,6 +170,14 @@ export default Vue.extend({
     },
     filterProductsByPriceRange() {
       this.FILTER_PRODUCT_BY_PRICE_RANGE(this.productPriceRange);
+    },
+    sortByTitle(order: number) {
+      this.priceSort = -1;
+      this.SORT_PRODUCTS_BY_TITLE(!!order);
+    },
+    sortByPrice(order: number) {
+      this.titleSort = -1;
+      this.SORT_PRODUCTS_BY_PRICE(!!order);
     },
   },
   async mounted() {

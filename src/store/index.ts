@@ -10,6 +10,7 @@ const store = new Vuex.Store({
   state: {
     products: [] as Product[],
     filter: (p: Product) => p as any,
+    comparator: (p1: Product, p2: Product) => p1 as any,
     productsFetching: false,
   },
   getters: {
@@ -17,7 +18,7 @@ const store = new Vuex.Store({
       return new Set([...state.products.map((p) => p.category)]);
     },
     filteredProducts(state) {
-      return state.products.filter(state.filter);
+      return state.products.filter(state.filter).sort(state.comparator);
     },
     productMinAndMaxPrices(state) {
       const sortedProducts = state.products.sort(
@@ -44,6 +45,14 @@ const store = new Vuex.Store({
     },
     SET_PRODUCTS_FETCHING(state, status: boolean) {
       state.productsFetching = status;
+    },
+    SORT_PRODUCTS_BY_TITLE(state, descending: boolean) {
+      state.comparator = (p1: Product, p2: Product) =>
+        p1.compareTitleWith(p2, descending);
+    },
+    SORT_PRODUCTS_BY_PRICE(state, descending: boolean) {
+      state.comparator = (p1: Product, p2: Product) =>
+        p1.comparePriceWith(p2, descending);
     },
   },
   actions: {

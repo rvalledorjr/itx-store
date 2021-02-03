@@ -29,4 +29,15 @@ export default class Product {
   withinPriceRange(priceRange: PriceRange): boolean {
     return this.price >= priceRange.from && this.price <= priceRange.to;
   }
+
+  comparePriceWith(other: Product, reverse = false): number {
+    return !reverse ? this.price - other.price : other.price - this.price;
+  }
+
+  compareTitleWith(other: Product, reverse = false): number {
+    const t1 = this.title.toLowerCase();
+    const t2 = other.title.toLowerCase();
+
+    return !reverse ? t1.localeCompare(t2) : t2.localeCompare(t1);
+  }
 }
