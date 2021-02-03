@@ -1,8 +1,12 @@
 <template>
   <v-app>
     <v-app-bar app elevation="1" outlined clipped-left color="white">
+      <v-app-bar-nav-icon @click="showNavDrawer = !showNavDrawer">
+      </v-app-bar-nav-icon>
       <v-toolbar-title>
-        <v-img src="./assets/luxcaddy-logo.png"></v-img>
+        <a @click.prevent="goToHome">
+          <v-img src="./assets/luxcaddy-logo.png"></v-img>
+        </a>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field
@@ -30,14 +34,14 @@
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer clipped app>
+    <v-navigation-drawer v-model="showNavDrawer" clipped app>
       <v-list>
         <v-subheader> Sort </v-subheader>
         <v-divider></v-divider>
         <v-list-item>
-          <v-list-item-text class="text-caption">
+          <v-list-item-action-text class="text-caption">
             Product Name
-          </v-list-item-text>
+          </v-list-item-action-text>
           <v-list-item-action>
             <v-btn-toggle v-model="titleSort" @change="sortByTitle">
               <v-btn>
@@ -50,9 +54,9 @@
           </v-list-item-action>
         </v-list-item>
         <v-list-item>
-          <v-list-item-text class="text-caption">
+          <v-list-item-action-text class="text-caption">
             Product Price
-          </v-list-item-text>
+          </v-list-item-action-text>
           <v-list-item-action>
             <v-btn-toggle v-model="priceSort" @change="sortByPrice">
               <v-btn>
@@ -152,6 +156,7 @@ export default Vue.extend({
       titleSort: -1,
       priceSort: -1,
       searchText: "",
+      showNavDrawer: true,
     };
   },
   computed: {
@@ -190,6 +195,11 @@ export default Vue.extend({
     resetSearch() {
       this.searchText = "";
       this.SEARCH_PRODUCTS(this.searchText);
+    },
+    goToHome() {
+      if (this.$route.path === "/") return;
+
+      this.$router.push("/");
     },
   },
   async mounted() {

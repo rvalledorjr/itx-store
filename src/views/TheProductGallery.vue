@@ -10,7 +10,7 @@
         <template v-slot:default="{ items }">
           <v-row>
             <v-col v-for="(p, i) in items" :key="i" md="3">
-              <ProductCard :product="p" />
+              <ProductCard :product="p" @click:product="goToProductPage" />
             </v-col>
           </v-row>
         </template>
@@ -53,6 +53,7 @@
 import Vue from "vue";
 import { mapGetters, mapState } from "vuex";
 import ProductCard from "@/components/ProductCard.vue";
+import Product from "@/model/Product";
 export default Vue.extend({
   components: {
     ProductCard,
@@ -61,6 +62,12 @@ export default Vue.extend({
   computed: {
     ...mapState(["productsFetching"]),
     ...mapGetters(["filteredProducts"]),
+  },
+
+  methods: {
+    goToProductPage(product: Product) {
+      this.$router.push(`/products/${product.id}`);
+    },
   },
 });
 </script>

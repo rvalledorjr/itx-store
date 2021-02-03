@@ -1,6 +1,6 @@
 <template>
   <v-card flat outlined class="pt-3">
-    <a>
+    <a @click.prevent="emitClickProduct">
       <v-img :src="product.image" height="150" contain> </v-img>
       <v-card-title class="text-body-1">
         {{ product.formattedPrice }}
@@ -28,6 +28,11 @@ export default Vue.extend({
   props: {
     product: {
       default: () => new Product(),
+    },
+  },
+  methods: {
+    emitClickProduct() {
+      this.$emit("click:product", this.product);
     },
   },
 });
