@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="showNavDrawer = !showNavDrawer">
       </v-app-bar-nav-icon>
       <v-toolbar-title>
-        <a @click.prevent="goToHome">
+        <a @click.prevent="resetSearch">
           <v-img src="./assets/luxcaddy-logo.png"></v-img>
         </a>
       </v-toolbar-title>
@@ -103,6 +103,8 @@ export default Vue.extend({
     },
     showProductsWithCategory(category: string) {
       this.FILTER_PRODUCT_BY_CATEGORY(category);
+
+      this.goToHome();
     },
     filterProductsByPriceRange() {
       this.FILTER_PRODUCT_BY_PRICE_RANGE(this.productPriceRange);
@@ -115,10 +117,12 @@ export default Vue.extend({
     },
     searchProduct() {
       this.SEARCH_PRODUCTS(this.searchText);
+      this.goToHome();
     },
     resetSearch() {
       this.searchText = "";
       this.SEARCH_PRODUCTS(this.searchText);
+      this.goToHome();
     },
     goToHome() {
       if (this.$route.path === "/") return;
