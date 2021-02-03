@@ -10,6 +10,7 @@ const store = new Vuex.Store({
   state: {
     products: [] as Product[],
     filter: (p: Product) => p as any,
+    productsFetching: false,
   },
   getters: {
     productCategories(state) {
@@ -41,14 +42,21 @@ const store = new Vuex.Store({
     RESET_PRODUCT_FILTER(state) {
       state.filter = (p: Product) => p as any;
     },
+    SET_PRODUCTS_FETCHING(state, status: boolean) {
+      state.productsFetching = status;
+    },
   },
   actions: {
     async fetchProducts(context) {
       try {
+        context.commit("SET_PRODUCTS_FETCHING", true);
+
         const response = await axios.get("https://fakestoreapi.com/products");
         const productsData = response.data as [];
 
         const products = productsData.map((pd) => new Product(pd));
+
+        context.commit("SET_PRODUCTS_FETCHING", false);
         context.commit("BULK_ADD_PRODUCTS", products);
       } catch (error) {
         console.log(error);

@@ -51,6 +51,7 @@
                 v-model="productPriceRange.range"
                 thumb-label
                 hide-details
+                @end="filterProductsByPriceRange"
               >
               </v-range-slider>
               <v-list-item-subtitle>
@@ -90,7 +91,11 @@
     </v-navigation-drawer>
 
     <v-main>
-      <router-view></router-view>
+      <v-container fill-height>
+        <v-row justify="center">
+          <router-view></router-view>
+        </v-row>
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -108,14 +113,6 @@ export default Vue.extend({
   computed: {
     ...mapGetters(["productCategories", "productMinAndMaxPrices"]),
   },
-  watch: {
-    productPriceRange(nv, ov) {
-      if (nv === ov) return;
-      if (nv === {}) return;
-
-      this.FILTER_PRODUCT_BY_PRICE_RANGE(nv);
-    },
-  },
   methods: {
     ...mapMutations([
       "FILTER_PRODUCT_BY_CATEGORY",
@@ -128,6 +125,9 @@ export default Vue.extend({
     },
     showProductsWithCategory(category: string) {
       this.FILTER_PRODUCT_BY_CATEGORY(category);
+    },
+    filterProductsByPriceRange() {
+      this.FILTER_PRODUCT_BY_PRICE_RANGE(this.productPriceRange);
     },
   },
   async mounted() {
