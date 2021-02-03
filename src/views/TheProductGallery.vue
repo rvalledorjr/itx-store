@@ -1,9 +1,9 @@
 <template>
-  <v-sheet>
+  <v-sheet style="width: 100%;">
     <v-container>
       <v-data-iterator
         :items="filteredProducts"
-        items-per-page="20"
+        :items-per-page="20"
         :loading="productsFetching"
         hide-default-footer
       >
