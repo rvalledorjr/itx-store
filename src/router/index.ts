@@ -8,7 +8,7 @@ const routes: Array<RouteConfig> = [
     path: "/",
     // component: () => import("@/views/TheProductGallery.vue"),
     components: {
-      default: () => import("@/views/TheProductGallery.vue"),
+      default: () => import("@/views/TheProductGalleryPage.vue"),
       productFilter: () =>
         import("@/components/ProductListItemPriceFilter.vue"),
       productSorter: () => import("@/components/ProductListItemSorter.vue"),

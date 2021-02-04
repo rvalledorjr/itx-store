@@ -11,7 +11,7 @@
     </a>
 
     <v-card-actions>
-      <v-btn color="#95ac42" tile block>
+      <v-btn color="#95ac42" tile block @click="emitClickAddToCart">
         <v-icon>mdi-cart-plus</v-icon>
         <span class="ml-3">
           Add to Cart
@@ -33,6 +33,9 @@ export default Vue.extend({
   methods: {
     emitClickProduct() {
       this.$emit("click:product", this.product);
+    },
+    emitClickAddToCart() {
+      this.$emit("click:add-to-cart", this.product);
     },
   },
 });

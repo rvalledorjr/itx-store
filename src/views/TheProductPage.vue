@@ -20,7 +20,13 @@
               {{ product.formattedPrice }}
             </v-card-title>
             <v-card-actions>
-              <v-btn tile x-large color="#95ac42" class="ml-auto">
+              <v-btn
+                tile
+                x-large
+                color="#95ac42"
+                class="ml-auto"
+                @click="addToCart"
+              >
                 <v-icon>mdi-cart-plus</v-icon>
                 Add to cart
               </v-btn>
@@ -35,7 +41,7 @@
 <script lang="ts">
 import Product from "@/model/Product";
 import Vue from "vue";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default Vue.extend({
   data() {
     return {
@@ -44,6 +50,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(["products"]),
+  },
+  methods: {
+    ...mapMutations(["ADD_TO_CART"]),
+    addToCart() {
+      this.ADD_TO_CART(this.product);
+    },
   },
   mounted() {
     const id = Number.parseInt(this.$route.params.id);

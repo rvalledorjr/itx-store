@@ -69,23 +69,93 @@
           <router-view></router-view>
         </v-row>
       </v-container>
+
+      <v-menu
+        offset-y
+        top
+        origin="center center"
+        transition="scale-transition"
+        :close-on-content-click="false"
+        max-height="600"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            fab
+            bottom
+            right
+            fixed
+            large
+            v-on="on"
+            v-bind="attrs"
+          >
+            <v-badge
+              right
+              color="red"
+              :value="shoppingCart.totalQuantity"
+              :content="shoppingCart.totalQuantity"
+            >
+              <v-icon large>mdi-cart-plus</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        <v-card width="500">
+          <v-card-text style="height: 300px; overflow-y: auto">
+            <v-list>
+              <v-list-item v-if="shoppingCart.empty">
+                <v-list-item-title>
+                  No items added to cart
+                </v-list-item-title>
+              </v-list-item>
+              <ShoppingCartListItem
+                v-for="(c, i) in shoppingCart.cartItems"
+                :key="i"
+                :cartItem="c"
+                @set:product-quantity="updateQuantity"
+                @click:remove-product="removeCartItem"
+              >
+              </ShoppingCartListItem>
+            </v-list>
+          </v-card-text>
+          <v-card-actions class="text-body-1">
+            <div class="ml-auto pa-2">
+              <span class="ml-auto">Total Qty: </span>
+              <span class="font-weight-black text-h5">
+                {{ shoppingCart.totalQuantity }}
+              </span>
+
+              <span class="ml-5">Total Price: </span>
+              <span class="font-weight-black text-h5">
+                {{ shoppingCart.formattedTotalPrice }}
+              </span>
+            </div>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import PriceRange from "@/model/PriceRange";
+import ShoppingCartListItem from "@/components/ShoppingCartListItem.vue";
+import Product from "./model/Product";
 export default Vue.extend({
+  components: {
+    ShoppingCartListItem,
+  },
   data() {
     return {
       productPriceRange: {} as PriceRange,
       searchText: "",
       showNavDrawer: true,
+      showCart: false,
     };
   },
   computed: {
+    ...mapState(["shoppingCart"]),
     ...mapGetters(["productCategories", "productMinAndMaxPrices"]),
   },
   methods: {
@@ -96,6 +166,8 @@ export default Vue.extend({
       "SORT_PRODUCTS_BY_TITLE",
       "SORT_PRODUCTS_BY_PRICE",
       "SEARCH_PRODUCTS",
+      "SET_PRODUCT_QUANTITY",
+      "REMOVE_FROM_CART",
     ]),
     ...mapActions(["fetchProducts"]),
     showAllProducts() {
@@ -128,6 +200,12 @@ export default Vue.extend({
       if (this.$route.path === "/") return;
 
       this.$router.push("/");
+    },
+    updateQuantity(product: Product, qty: number) {
+      this.SET_PRODUCT_QUANTITY({ product: product, quantity: qty });
+    },
+    removeCartItem(product: Product) {
+      this.REMOVE_FROM_CART(product);
     },
   },
   async mounted() {

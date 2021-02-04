@@ -3,6 +3,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import PriceRange from "@/model/PriceRange";
+import ShoppingCart from "@/model/ShoppingCart";
+import ShoppingCartItem from "@/model/ShoppingCartItem";
 
 Vue.use(Vuex);
 
@@ -12,6 +14,7 @@ const store = new Vuex.Store({
     filter: (p: Product) => p as any,
     comparator: (p1: Product, p2: Product) => p1 as any,
     productsFetching: false,
+    shoppingCart: new ShoppingCart(),
   },
   getters: {
     productCategories(state) {
@@ -56,6 +59,15 @@ const store = new Vuex.Store({
     },
     SEARCH_PRODUCTS(state, searchText: string) {
       state.filter = (p: Product) => p.containsInfo(searchText);
+    },
+    ADD_TO_CART(state, product: Product) {
+      state.shoppingCart.add(product);
+    },
+    SET_PRODUCT_QUANTITY(state, load: { product: Product; quantity: 1 }) {
+      state.shoppingCart.setProductQuantity(load.product, load.quantity);
+    },
+    REMOVE_FROM_CART(state, product: Product) {
+      state.shoppingCart.remove(product);
     },
   },
   actions: {
