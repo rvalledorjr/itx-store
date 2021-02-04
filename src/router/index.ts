@@ -6,7 +6,6 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    // component: () => import("@/views/TheProductGallery.vue"),
     components: {
       default: () => import("@/views/TheProductGalleryPage.vue"),
       productFilter: () =>
