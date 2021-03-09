@@ -7,6 +7,7 @@ export default class Product {
   description = "";
   category = "";
   image = "";
+  showFullTitle = false;
 
   constructor(init?: any) {
     if (!init) return;

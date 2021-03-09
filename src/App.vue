@@ -172,6 +172,8 @@ export default Vue.extend({
     ...mapActions(["fetchProducts"]),
     showAllProducts() {
       this.RESET_PRODUCT_FILTER();
+
+      this.goToHome();
     },
     showProductsWithCategory(category: string) {
       this.FILTER_PRODUCT_BY_CATEGORY(category);

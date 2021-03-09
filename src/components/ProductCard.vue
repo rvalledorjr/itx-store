@@ -5,10 +5,16 @@
       <v-card-title class="text-body-1">
         {{ product.formattedPrice }}
       </v-card-title>
-      <v-card-subtitle>
-        {{ product.title }}
-      </v-card-subtitle>
     </a>
+    <v-card-subtitle class="d-flex flex-column">
+      <div v-if="product.showFullTitle" >{{ product.title }}</div>
+      <div v-else style="height: 1rem; overflow: hidden;">{{ product.title }}</div>
+      <v-btn icon class="mx-auto" @click="product.showFullTitle = !product.showFullTitle">
+        <v-icon v-if="product.showFullTitle" color="#95ac42">mdi-chevron-up-circle</v-icon>
+        <v-icon v-else color="#95ac42">mdi-chevron-down-circle</v-icon>
+      </v-btn>
+    </v-card-subtitle>
+    
 
     <v-card-actions>
       <v-btn color="#95ac42" tile block @click="emitClickAddToCart">
